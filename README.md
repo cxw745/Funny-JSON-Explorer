@@ -1,8 +1,3 @@
----
-title: Funny-JSON-Explorer
-date: 2024-06-10T19:44:57Z
-lastmod: 2024-06-12T11:26:46Z
----
 
 # Funny JSON Explorer设计文档
 
@@ -26,7 +21,7 @@ lastmod: 2024-06-12T11:26:46Z
 * ​`example.json`​：测试可视化结果的代码。
 * ​`icons.json`​：图标族的配置文件。
 
-​![image](https://cdn.jsdelivr.net/gh/cxw745/ImgBed/20240612104909.png)​
+​![image](https://cdn.jsdelivr.net/gh/cxw745/ImgBed/20240612123006.png)​
 
 * **组合模式**：在 `CompositeNode`​ 和 `LeafNode`​ 之间使用。`CompositeNode`​ 可以包含多个 `Node`​ 对象（即可以是 `CompositeNode`​ 或 `LeafNode`​）。
 * **建造者模式**：通过 `NodeBuilder`​ 和其子类 `CompositeNodeBuilder`​ 构建复杂的树结构，并由 `TreeDirector`​ 指导构建过程。

@@ -1,69 +1,69 @@
 @startuml
-!define RECTANGLE class
-
-RECTANGLE FjeExplorer {
+skinparam linetype ortho
+class FjeExplorer {
     + static load_json(file_path)
     + static load_icons(file_path)
     + static parse_arguments()
 }
 
-RECTANGLE Node {
+class Node {
     + name : str
     + abstract is_leaf() : bool
 }
 
-RECTANGLE CompositeNode {
+class CompositeNode {
     + children : List[Node]
     + add(node : Node)
     + is_leaf() : bool
 }
 
-RECTANGLE LeafNode {
+class LeafNode {
     + value : Any
     + is_leaf() : bool
 }
 
-RECTANGLE NodeBuilder {
+abstract NodeBuilder {
     + abstract build(data : Any, name="root") : Node
 }
 
-RECTANGLE CompositeNodeBuilder {
+class CompositeNodeBuilder {
     + build(data : Any, name="root") : Node
 }
 
-RECTANGLE TreeDirector {
+class TreeDirector {
     - _builder : NodeBuilder
     + build_tree(data : Any, name='root') : Node
 }
 
-RECTANGLE Visualizer {
+class Visualizer {
     + icons : Dict[str, str]
     + abstract visualize(node : Node, level=0)
 }
 
-RECTANGLE TreeVisualizer {
+class TreeVisualizer {
     + visualize(node : Node)
     + draw(node : Node, level=0, is_last_child=False) : str
     + beautify(result : str) : str
 }
 
-RECTANGLE RectangleVisualizer {
+class RectangleVisualizer {
     + visualize(node : Node)
     + draw(node : Node, level=0, is_last_child=False) : str
     + beautify(result : str) : str
 }
 
-RECTANGLE NewVisualizer {
+class NewVisualizer {
     + visualize(node : Node, level=0) : str
 }
 
-RECTANGLE VisualizerFactory {
+abstract VisualizerFactory {
     + abstract get_visualizer(style : str, icons : Dict[str, str]) : Visualizer
 }
 
-RECTANGLE ConcreteVisualizerFactory {
+class ConcreteVisualizerFactory {
     + get_visualizer(style : str, icons : Dict[str, str]) : Visualizer
 }
+
 
 
 Node <|-- CompositeNode
@@ -74,18 +74,15 @@ Visualizer <|-- RectangleVisualizer
 Visualizer <|-- NewVisualizer
 VisualizerFactory <|-- ConcreteVisualizerFactory
 
-
 CompositeNode "1" *-- "0..n" Node
-
 TreeDirector "1" *-- "1" NodeBuilder
-
 VisualizerFactory <|.. ConcreteVisualizerFactory
 ConcreteVisualizerFactory "1" *-- "1..n" Visualizer
 ConcreteVisualizerFactory ..> Visualizer : create
+FjeExplorer .down.> CompositeNodeBuilder : 使用
+FjeExplorer .down.> TreeDirector : 使用
+FjeExplorer .down.> ConcreteVisualizerFactory : 使用
 
-FjeExplorer .down.> "1" CompositeNodeBuilder : 使用
-FjeExplorer .down.> "1" TreeDirector : 使用
-FjeExplorer .down.> "1" ConcreteVisualizerFactory : 使用
 
 note top of CompositeNode
   组合模式
