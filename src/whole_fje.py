@@ -83,12 +83,12 @@ class RectangleVisualizer(Visualizer):
         indent = "│ " * (level - 1) if level > 0 else ""
         if node.is_leaf():
             if node.value == None:
-                result += f"{indent}{prefix}{icons['leaf']}{node.name}\n"
+                result += f"{indent}{prefix}{self.icons['leaf']}{node.name}\n"
             else:
-                result += f"{indent}{prefix}{icons['leaf']}{node.name}: {node.value}\n"
+                result += f"{indent}{prefix}{self.icons['leaf']}{node.name}: {node.value}\n"
         else:
             if node.name != "root":
-                result += f"{indent}{prefix}{icons['composite']}{node.name}\n"
+                result += f"{indent}{prefix}{self.icons['composite']}{node.name}\n"
             if node.children:
                 for i, child in enumerate(node.children[:-1]):
                     result += self.draw(child, level + 1, False)
@@ -103,12 +103,13 @@ class RectangleVisualizer(Visualizer):
         for i in range(len(lines)):
             lines[i] = '│' + lines[i][1:-1] + '┤'
         lines[0] = '┌' + lines[0][1:-1] + '┐'
-        lines[-2] = '└' + lines[-2][1:-1] + '┘'
-        lines[-2] = lines[-2].replace("├", "─", 1)
+        lines[-2] = lines[-2][:-1] + '┘'
+        lines[-2] = lines[-2].replace("│", "└")
+        lines[-2] = lines[-2].replace(" ", "─", lines[-2].count("└"))
+        lines[-2] = lines[-2].replace("├", "─")
+
         lines[-1] = ''
         return '\n'.join(lines)
-
-
 class NewVisualizer(Visualizer):
     def visualize(self, node, level=0):
         result = "This is new style!"
